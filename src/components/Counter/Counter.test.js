@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import Counter from '.';
 
 describe("Counter Component", () => {
@@ -61,5 +62,44 @@ describe("Counter Component", () => {
         expect(buttonIncrement).toHaveClass("button--decrement");
     });
 
-    
+    test("Deve incrementar + 1 ao clicar no botão incrementar", () => {
+        render(<Counter />);
+
+        const buttonIncrement = screen.getByRole("button", { name: /incrementar/i });
+
+        expect(screen.queryByText("1")).toBeNull();
+        userEvent.click(buttonIncrement);
+        expect(screen.getByText("1")).toBeInTheDocument();
+    });
+
+    test("Deve decrementar - 1 ao clicar no botão decrementar", () => {
+        render(<Counter />);
+
+        const buttonDecrement = screen.getByRole("button", { name: /decrementar/i });
+
+        expect(screen.queryByText("-1")).toBeNull();
+        userEvent.click(buttonDecrement);
+        expect(screen.getByText("-1")).toBeInTheDocument();
+    });
+
+    test("Deve adicionar a classe counter__title--increment no titulo, quando o valor for maior que 0", () => {
+        render(<Counter />);
+
+        const buttonIncrement = screen.getByRole("button", { name: /incrementar/i });
+
+        expect(screen.queryByText("0")).not.toHaveClass("counter__title--increment");
+        userEvent.click(buttonIncrement);
+        expect(screen.getByText("1")).toHaveClass("counter__title--increment");
+    });
+
+    test("Deve adicionar a classe counter__title--decrement no titulo, quando o valor for menor que 0", () => {
+        render(<Counter />);
+
+        const buttonDecrement = screen.getByRole("button", { name: /decrementar/i });
+
+        expect(screen.queryByText("0")).not.toHaveClass("counter__title--decrement");
+        userEvent.click(buttonDecrement);
+        expect(screen.getByText("-1")).toHaveClass("counter__title--decrement");
+    });
+
 });
