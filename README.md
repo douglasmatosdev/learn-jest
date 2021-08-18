@@ -1,1 +1,1 @@
-# learn-jest
+# Learn Jest
